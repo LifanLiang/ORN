@@ -35,8 +35,6 @@ def lr_update(grad_prev, grad, change, lr, lr_min=1e-6, lr_max=1.0, plus_factor=
 @jit('Tuple((float64[:,:], float64[:,:]))(float64[:,:], float64[:,:], float64[:,:], float64[:,:], float64[:,:], float64, float64, float64, float64)', nopython=True, nogil=True, parallel=True)
 def compute_gradient(deg, mut, X, Y, Z, alpha_X, beta_X, alpha_Z, beta_Z):
     '''
-    The only difference from the unmasked version is that the gradients computed from masked elements is not taken into account.
-    There should be a much more efficint implement, but this is the solution right now for the sake of time.
     deg: the output (DEG)
     mut: the input (Mutation)
     X: relationships between mutations and pathways, latent variable whose gradient is returned
@@ -103,8 +101,6 @@ def m_step(deg, mut, w_x, w_z, X, Z, alpha_X, beta_X, alpha_Z, beta_Z, max_iter,
 
 def ORN(deg, mut, pathway_size, alpha_X=1.0, beta_X=1.0, alpha_Z=1.0, beta_Z=1.0, leaky=True, max_iter=100):
     '''
-    Boolean matrix factorization by using an identity matrix as input and observation as output for a neural network.
-    The edge weights learned through the network can then be interpreted as the factor matrixes.
     deg: the matrix of differential expression, each row should be a sample.
     mut: the matrix of somatic mutations, each row should be a sample. The number of samples should the same as deg.
     pathway_size: the number of pathways.
